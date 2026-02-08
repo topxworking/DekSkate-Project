@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
     {
         healthSlider.value = health;
         scoreText.text = "Score: " + score;
-        timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+        
+        int displayTime = Mathf.FloorToInt(timeRemaining);
+        timeText.text = "Time: " + displayTime.ToString();
     }
 
     public void AddScore(int amount)
@@ -49,9 +51,14 @@ public class GameManager : MonoBehaviour
     {
         isGameActive = false;
         
-        float finalScore = score * Mathf.Max(0, timeRemaining);
+        int finalTimeLeft = Mathf.FloorToInt(timeRemaining);
+        int timeBonus = finalTimeLeft * 50;
+        int totalFinalScore = score + timeBonus;
 
         winPanel.SetActive(true);
-        finalScoreText.text = "Final Score: " + finalScore.ToString("F0");
+        finalScoreText.text =
+            $"Score: {score}\n" +
+            $"Time Bonus: ({finalTimeLeft}s x 50): {timeBonus}\n" +
+            $"Total: {totalFinalScore}";
     }
 }
