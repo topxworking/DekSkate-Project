@@ -40,6 +40,17 @@ public class PlayerController : MonoBehaviour
     {
         _isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
 
+        HandleMovement();
+    }
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector3(_moveInput.x * moveSpeed, rb.linearVelocity.y, 0);
+        rb.AddForce(Physics.gravity * (garvityScale - 1) , ForceMode.Acceleration);
+    }
+
+    private void HandleMovement()
+    {
         if (_moveInput.x > 0.01f)
         {
             transform.eulerAngles = new Vector3(0, 90f, 0);
@@ -47,26 +58,6 @@ public class PlayerController : MonoBehaviour
         else if (_moveInput.x < -0.01f)
         {
             transform.eulerAngles = new Vector3(0, -90f, 0);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        HandleMovement();
-        ApplyGravity();
-    }
-
-    private void HandleMovement()
-    {
-        Vector3 targetVelocity = new Vector3(_moveInput.x * moveSpeed, rb.linearVelocity.y, 0);
-        rb.linearVelocity = targetVelocity;
-    }
-
-    private void ApplyGravity()
-    {
-        if (rb.useGravity)
-        {
-            rb.AddForce(Physics.gravity * (garvityScale - 1) * rb.mass);
         }
     }
 
@@ -84,15 +75,6 @@ public class PlayerController : MonoBehaviour
         if (rb.linearVelocity.y > 0)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier, 0);
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
     }
 }
