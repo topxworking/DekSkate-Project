@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public int scoreValue = 10;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider healthcare)
     {
-        
+        if (healthcare.CompareTag("Player"))
+        {
+            FindAnyObjectByType<GameManager>().AddScore(scoreValue);
+            Destroy(gameObject);
+        }
     }
 }
