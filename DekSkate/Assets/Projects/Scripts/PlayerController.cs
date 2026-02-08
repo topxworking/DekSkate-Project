@@ -1,10 +1,10 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 8f;
-    [SerializeField] private float rotationSpeed = 15f;
 
     [Header("Jump Settings")]
     [SerializeField] private float jumpForce = 12f;
@@ -40,11 +40,13 @@ public class PlayerController : MonoBehaviour
     {
         _isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if (_moveInput.x != 0)
+        if (_moveInput.x > 0.01f)
         {
-            float targetAngle = _moveInput.x > 0 ? 90f : -90f;
-            Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            transform.eulerAngles = new Vector3(0, 90f, 0);
+        }
+        else if (_moveInput.x < -0.01f)
+        {
+            transform.eulerAngles = new Vector3(0, -90f, 0);
         }
     }
 
