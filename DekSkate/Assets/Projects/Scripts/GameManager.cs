@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public GameObject winPanel;
     public TextMeshProUGUI finalScoreText;
-    public TextMeshProUGUI starSummarayText;
+    public TextMeshProUGUI currentStar;
     public GameObject[] starImages;
 
     void Update()
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         healthSlider.value = health;
         scoreText.text = "Score: " + score;
-        
+
         int displayTime = Mathf.FloorToInt(timeRemaining);
         timeText.text = "Time: " + displayTime.ToString();
     }
@@ -72,8 +72,6 @@ public class GameManager : MonoBehaviour
             $"Score: {score}\n" +
             $"Time Bonus: ({finalTimeLeft}s x 50): {timeBonus}\n" +
             $"Total: {totalFinalScore}";
-
-        starSummarayText.text = $"Stars Collected: {starsCollected}/3 Stars!";
 
         for (int i = 0; i < starImages.Length; i++)
         {
