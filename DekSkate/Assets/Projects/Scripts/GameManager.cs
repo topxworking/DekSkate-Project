@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [Header("Player Stats")]
     public float health = 100f;
     public int score = 0;
+    public int starsCollected = 0;
     public float timeRemaining = 60f;
     public bool isGameActive = true;
 
@@ -16,6 +17,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public GameObject winPanel;
     public TextMeshProUGUI finalScoreText;
+    public TextMeshProUGUI starSummarayText;
+    public GameObject[] starImages;
 
     void Update()
     {
@@ -47,6 +50,15 @@ public class GameManager : MonoBehaviour
         score += amount;
     }
 
+    public void CollectStar()
+    {
+        if (starsCollected < 3)
+        {
+            starsCollected++;
+            AddScore(1000);
+        }
+    }
+
     public void EndLevel()
     {
         isGameActive = false;
@@ -60,5 +72,15 @@ public class GameManager : MonoBehaviour
             $"Score: {score}\n" +
             $"Time Bonus: ({finalTimeLeft}s x 50): {timeBonus}\n" +
             $"Total: {totalFinalScore}";
+
+        starSummarayText.text = $"Stars Collected: {starsCollected}/3 Stars!";
+
+        for (int i = 0; i < starImages.Length; i++)
+        {
+            if (i < starsCollected)
+                starImages[i].SetActive(true);
+            else
+                starImages[i].SetActive(false);
+        }
     }
 }
