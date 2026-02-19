@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
+        Time.timeScale = 0f;
         _isDead = true;
 
         animator.SetTrigger(DieHash);
