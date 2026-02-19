@@ -6,8 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Player Stats")]
     public int score = 0;
-    public int starsCollected = 0;
-    public float timeRemaining = 60f;
+    public float timeRemaining = 300f;
     public bool isGameActive = true;
 
     [Header("UI References")]
@@ -15,8 +14,6 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public GameObject winPanel;
     public TextMeshProUGUI finalScoreText;
-    public TextMeshProUGUI currentStar;
-    public GameObject[] starImages;
 
     void Update()
     {
@@ -36,10 +33,10 @@ public class GameManager : MonoBehaviour
 
     void UpdateUI()
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = "SCORE: " + score.ToString("D7");
 
         int displayTime = Mathf.FloorToInt(timeRemaining);
-        timeText.text = "Time: " + displayTime.ToString();
+        timeText.text = "TIME: " + displayTime.ToString();
     }
 
     public void AddScore(int amount)
@@ -47,35 +44,19 @@ public class GameManager : MonoBehaviour
         score += amount;
     }
 
-    public void CollectStar()
-    {
-        if (starsCollected < 3)
-        {
-            starsCollected++;
-            AddScore(1000);
-        }
-    }
-
     public void EndLevel()
     {
+        Time.timeScale = 0f;
         isGameActive = false;
-        
+
         int finalTimeLeft = Mathf.FloorToInt(timeRemaining);
         int timeBonus = finalTimeLeft * 50;
         int totalFinalScore = score + timeBonus;
 
         winPanel.SetActive(true);
         finalScoreText.text =
-            $"Score: {score}\n" +
-            $"Time Bonus: ({finalTimeLeft}s x 50): {timeBonus}\n" +
-            $"Total: {totalFinalScore}";
-
-        for (int i = 0; i < starImages.Length; i++)
-        {
-            if (i < starsCollected)
-                starImages[i].SetActive(true);
-            else
-                starImages[i].SetActive(false);
-        }
+            $"SCORE: {score.ToString("D7")}\n" +
+            $"TIME BONUS: ({finalTimeLeft}s x 50): {timeBonus.ToString("D7")}\n" +
+            $"TOTAL: {totalFinalScore.ToString("D7")}";
     }
 }
