@@ -1,25 +1,44 @@
-using Unity.VisualScripting;
+using System.Collections;
+using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    public PlayerData playerData;
+
+    [Header("Intro UI")]
+    public GameObject introPanel;
+    public CanvasGroup introCanvasGroup;
+    public float fadeDuration = 1f;
+    public TextMeshProUGUI introLevelText;
+    public TextMeshProUGUI introLifeText;
+    public TextMeshProUGUI hudLifeText;
+
     [Header("Component")]
-    [SerializeField] private Animator animator;
+    public Animator animator;
 
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 8f;
+    public float moveSpeed = 8f;
+    public ParticleSystem moveDust;
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpForce = 20f;
-    [SerializeField] private float jumpCutMultiplier = 0.5f;
-    [SerializeField] private float gravityScale = 6f;
+    public float jumpForce = 20f;
+    public float jumpCutMultiplier = 0.5f;
+    public float gravityScale = 6f;
 
     [Header("Ground Detection")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.2f;
-    [SerializeField] private LayerMask groundLayer;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+
+    [Header("Life System")]
+    private string lifePrefix = "x ";
+    private int currentLife;
+    public int maxLife = 3;
+    public GameObject gameOverUI;
+    private Vector3 startPosition;
 
     private Rigidbody rb;
     private Vector2 _moveInput;
@@ -35,16 +54,30 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        _inputs = new PlayerControls();
 
+        rb = GetComponent<Rigidbody>();
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
-        _inputs = new PlayerControls();
+        if (playerData != null)
+        {
+            currentLife = playerData.currentLife;
+        }
+
+        if (introCanvasGroup != null)
+        {
+            StartCoroutine(LevelIntro());
+        }
+
+        startPosition = transform.position;
+        UpdateUI();
+        if (gameOverUI != null)
+            gameOverUI.SetActive(false);
+
 
         _inputs.Player.Move.performed += ctx => _moveInput = ctx.ReadValue<Vector2>();
         _inputs.Player.Move.canceled += ctx => _moveInput = Vector2.zero;
-
         _inputs.Player.Jump.performed += ctx => Jump();
         _inputs.Player.Jump.canceled += ctx => JumpCut();
     }
@@ -87,8 +120,23 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        bool isWalking = Mathf.Abs(_moveInput.x) > 0.01f;
+        bool isWalking = Mathf.Abs(_moveInput.x) > 0.01f && _isGrounded;
         animator.SetBool(IsWalkingHash, isWalking);
+
+        if (isWalking)
+        {
+            if (!moveDust.isPlaying)
+            {
+                moveDust.Play();
+            }
+        }
+        else
+        {
+            if (moveDust.isPlaying)
+            {
+                moveDust.Stop();
+            }
+        }
     }
 
     private void Jump()
@@ -116,7 +164,6 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (_isDead) return;
-
         if (collision.gameObject.CompareTag("Obstacle"))
         {
             Die();
@@ -125,12 +172,77 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        Time.timeScale = 0f;
+        if (_isDead) return;
         _isDead = true;
+
+        playerData.currentLife--;
+        UpdateUI();
+
+        if (playerData.currentLife > 0)
+        {
+            StartCoroutine(Respawn());
+        }
+        else
+        {
+            GameOver();
+        }
 
         animator.SetTrigger(DieHash);
         rb.linearVelocity = Vector3.zero;
+        _inputs.Disable();
+    }
+
+    private IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(1.5f);
+        transform.position = startPosition;
+
+        _isDead = false;
+        _inputs.Enable();
+
+        animator.Rebind();
+        animator.Update(0f);
+    }
+
+    private void UpdateUI()
+    {
+        if (hudLifeText != null)
+        {
+            hudLifeText.text = lifePrefix + playerData.currentLife;
+        }
+    }
+
+    private void GameOver()
+    {
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+            playerData.ResetData();
+        }
+
+        Time.timeScale = 0f;
+    }
+
+    private IEnumerator LevelIntro()
+    {
+        introCanvasGroup.alpha = 1f;
+        introLevelText.text = SceneManager.GetActiveScene().name;
+        introLifeText.text = lifePrefix + playerData.currentLife;
 
         _inputs.Disable();
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            introCanvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        introCanvasGroup.alpha = 0f;
+        introCanvasGroup.gameObject.SetActive(false);
+        _inputs.Enable();
     }
 }

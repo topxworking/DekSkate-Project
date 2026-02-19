@@ -1,9 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Player Data")]
+    public PlayerData playerData;
+
     [Header("Player Stats")]
     public int score = 0;
     public float timeRemaining = 300f;
@@ -14,6 +18,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public GameObject winPanel;
     public TextMeshProUGUI finalScoreText;
+
+    private void Start()
+    {
+        if (playerData != null)
+        {
+            score = playerData.totalScore;
+        }
+        UpdateUI();
+    }
 
     void Update()
     {
@@ -34,7 +47,6 @@ public class GameManager : MonoBehaviour
     void UpdateUI()
     {
         scoreText.text = "SCORE: " + score.ToString("D7");
-
         int displayTime = Mathf.FloorToInt(timeRemaining);
         timeText.text = "TIME: " + displayTime.ToString();
     }
@@ -46,6 +58,8 @@ public class GameManager : MonoBehaviour
 
     public void EndLevel()
     {
+        if (!isGameActive) return;
+
         Time.timeScale = 0f;
         isGameActive = false;
 
@@ -53,10 +67,35 @@ public class GameManager : MonoBehaviour
         int timeBonus = finalTimeLeft * 50;
         int totalFinalScore = score + timeBonus;
 
+        if (playerData != null)
+        {
+            playerData.totalScore = totalFinalScore;
+        }
+
         winPanel.SetActive(true);
         finalScoreText.text =
             $"SCORE: {score.ToString("D7")}\n" +
             $"TIME BONUS: ({finalTimeLeft}s x 50): {timeBonus.ToString("D7")}\n" +
             $"TOTAL: {totalFinalScore.ToString("D7")}";
+    }
+
+    public void NextLevelButton(string nextSceneName)
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(nextSceneName);
+    }
+
+    public void RestartButton()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("1-1");
+        playerData.ResetData();
+    }
+
+    public void HomeButton()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+        playerData.ResetData();
     }
 }
