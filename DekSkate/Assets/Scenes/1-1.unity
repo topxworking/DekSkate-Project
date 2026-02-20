@@ -17805,21 +17805,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3867776504307649311, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3885045086551016508, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1769124525}
-    - target: {fileID: 3885045086551016508, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RestartButton
-      objectReference: {fileID: 0}
     - target: {fileID: 5058765514443707792, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
       propertyPath: m_Name
-      value: UICanvas
+      value: CVS_Gameplay
       objectReference: {fileID: 0}
     - target: {fileID: 5354217975980325928, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -17905,18 +17897,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6544531267614302229, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6815191319753388208, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1769124525}
-    - target: {fileID: 6815191319753388208, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HomeButton
-      objectReference: {fileID: 0}
     - target: {fileID: 7006860044812095347, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -17925,10 +17909,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1769124525}
-    - target: {fileID: 8810793265959289974, guid: 9bc26c7827f657c4d9ec77ac21e4547a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RestartButton
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
