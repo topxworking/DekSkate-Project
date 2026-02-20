@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,9 +18,13 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public GameObject winPanel;
     public TextMeshProUGUI finalScoreText;
+    public GameObject pausePanel;
+    public GameObject pauseButton;
 
-    private void Start()
+    private void Awake()
     {
+        pauseButton.SetActive(true);
+
         if (playerData != null)
         {
             score = playerData.totalScore;
@@ -92,10 +96,24 @@ public class GameManager : MonoBehaviour
         playerData.ResetData();
     }
 
-    public void HomeButton()
+    public void MainMenuButton()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
         playerData.ResetData();
+    }
+
+   public void PauseButton()
+    {
+        pausePanel.SetActive(true);
+        pauseButton.SetActive(false);
+        Time.timeScale = 0f;
+    }
+
+    public void ResumeButton()
+    {
+        pausePanel?.SetActive(false);
+        pauseButton?.SetActive(true);
+        Time.timeScale = 1f;
     }
 }

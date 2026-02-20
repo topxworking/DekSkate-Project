@@ -11,8 +11,8 @@ public class CameraFollow : MonoBehaviour
 
     [Header("Limits")]
     public bool lockY = false;
-    public float minX = -100f;
-    public float maxX = 100f;
+    public float minX = -200f;
+    public float maxX = 200f;
 
     private Vector3 _velocity = Vector3.zero;
 

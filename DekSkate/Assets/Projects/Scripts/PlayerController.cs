@@ -40,6 +40,13 @@ public class PlayerController : MonoBehaviour
     public GameObject gameOverUI;
     private Vector3 startPosition;
 
+    [Header("Audio Settings")]
+    public AudioSource walkAudioSource;
+    public AudioSource sfxAudioSource;
+    public AudioClip dieSound;
+    public AudioClip walkSound;
+    public AudioClip jumpSound;
+
     private Rigidbody rb;
     private Vector2 _moveInput;
     private bool _isGrounded;
@@ -74,7 +81,6 @@ public class PlayerController : MonoBehaviour
         UpdateUI();
         if (gameOverUI != null)
             gameOverUI.SetActive(false);
-
 
         _inputs.Player.Move.performed += ctx => _moveInput = ctx.ReadValue<Vector2>();
         _inputs.Player.Move.canceled += ctx => _moveInput = Vector2.zero;
@@ -129,12 +135,24 @@ public class PlayerController : MonoBehaviour
             {
                 moveDust.Play();
             }
+
+            if (!walkAudioSource.isPlaying)
+            {
+                walkAudioSource.clip = walkSound;
+                walkAudioSource.loop = true;
+                walkAudioSource.Play();
+            }
         }
         else
         {
             if (moveDust.isPlaying)
             {
                 moveDust.Stop();
+            }
+
+            if (walkAudioSource.isPlaying)
+            {
+                walkAudioSource.Stop();
             }
         }
     }
@@ -148,6 +166,11 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             animator.SetTrigger(JumpHash);
+
+            if (jumpSound != null)
+            {
+                sfxAudioSource.PlayOneShot(jumpSound);
+            }
         }
     }
 
@@ -174,6 +197,12 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead) return;
         _isDead = true;
+
+        walkAudioSource.Stop();
+        if (dieSound != null)
+        {
+            sfxAudioSource.PlayOneShot(dieSound);
+        }
 
         playerData.currentLife--;
         UpdateUI();
