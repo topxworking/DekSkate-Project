@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     {
         if (isGameActive)
         {
-            if (timeRemaining > 0)
+            if (timeRemaining > 1)
             {
                 timeRemaining -= Time.deltaTime;
                 UpdateUI();
