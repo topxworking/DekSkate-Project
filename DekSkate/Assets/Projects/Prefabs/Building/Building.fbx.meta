@@ -3,7 +3,22 @@ guid: c167627b26665e447b6b790be3815d9e
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Building
+    second: {fileID: 2100000, guid: 718f67494669f9547b56242f9efe2d94, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Building_Normal
+    second: {fileID: 2800000, guid: 318bcb1865c8bfb4cad4ebe909928e37, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Buildingtex
+    second: {fileID: 2800000, guid: c6490a5bd1d9eb7449fd5a31614618b9, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
