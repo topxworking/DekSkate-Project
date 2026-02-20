@@ -5,7 +5,6 @@ public class EnemyWalk : MonoBehaviour
     public Transform[] waypoints;
     public float speed = 2f;
     public float rotationSpeed = 5f;
-    public bool lookAtTarget = true;
 
     private int _currentWaypointIndex;
 
